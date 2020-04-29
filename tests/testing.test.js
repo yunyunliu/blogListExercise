@@ -1,12 +1,13 @@
 const listHelper = require('../utils/listHelper');
 
+// @ts-ignore
 test('dummy returns 1', () => {
   const blogs = [];
   const result = listHelper.dummy(blogs);
+  // @ts-ignore
   expect(result).toBe(1);
 });
 
-describe('totalLikes', () => {
   const blogs1= [];
   const blogs2 = [{
     _id: '5a422aa71b54a676234d17f8',
@@ -31,14 +32,35 @@ describe('totalLikes', () => {
   }
 ];
 
+// @ts-ignore
+describe('totalLikes', () => {
+  
+  // @ts-ignore
   test('empty array is zero', () => {
+    // @ts-ignore
     expect(listHelper.totalLikes(blogs1)).toBe(0);
   });
+  // @ts-ignore
   test('array of one blog is that blog\'s number of likes', () => {
+    // @ts-ignore
     expect(listHelper.totalLikes(blogs2)).toBe(5);
   });
+  // @ts-ignore
   test('correctly sums the likes of a longer array', () => {
+    // @ts-ignore
     expect(listHelper.totalLikes(blogs3)).toBe(36);
   });
 });
 
+describe('favoriteBlog', () => {
+
+  test('if given an empty array, returns 0', () => {
+    expect(listHelper.favoriteBlog(blogs1)).toBe(0);
+  });
+  test('if given an array with one blog, it will return that blog', () => {
+    expect(listHelper.favoriteBlog(blogs2)).toEqual(blogs2[0]);
+  });
+  test('given an array of many blogs, will return the array element with the greatest number of likes', () => {
+    expect(listHelper.favoriteBlog(blogs3)).toEqual(blogs3[2]);
+  });
+});
