@@ -84,9 +84,16 @@ describe('when provided with a specific id', () => {
     expect(dataAfterDelete).toHaveLength(initialData.length - 1)
     expect(titles).not.toContain(blogToDelete.title)
   })
+  test('retrieves blog with corresponding id', async () => {
+    const initialData = await Blog.find({}) // mongoose query so you get an array of documents that match the query back
+    const firstBlog = initialData[0].toJSON()
+ 
+    const result = await api.get(`/api/blogs/${firstBlog.id}`) // api call, so you get an express response object back
+    const body = result.body
+    // console.log('response body: ', body)
+    expect(firstBlog.title).toBe(body.title)
+  })
 })
-
-
 
 afterAll(() => {
   mongoose.connection.close()
