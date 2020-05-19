@@ -55,7 +55,8 @@ describe('when there are existing blog records in database', () => {
     const newBlog = { 
       title: "Canonical string reduction", 
       author: "Edsger W. Dijkstra", 
-      url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html", likes: 12
+      url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html", 
+      likes: 12
     }
     await api
       .post('/api/blogs')
@@ -92,6 +93,15 @@ describe('when provided with a specific id', () => {
     const body = result.body
     // console.log('response body: ', body)
     expect(firstBlog.title).toBe(body.title)
+  })
+  test('the corresponding data record can be edited', async () => {
+    const initialData = await Blog.find({})
+    const blog = initialData[0].toJSON()
+    const newData = { likes: blog.likes + 1 }
+    const updated = await api
+      .put(`/api/blogs/${blog.id}`)
+      .send(newData)
+    expect(updated.body.likes).toBe(blog.likes + 1)
   })
 })
 
