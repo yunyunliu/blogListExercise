@@ -22,4 +22,4 @@ const favoriteBlog = blogs => {
 
 // }
 
-module.exports = { dummy, totalLikes, favoriteBlog, motBlogs };
+module.exports = { dummy, totalLikes, favoriteBlog};
