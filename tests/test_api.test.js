@@ -8,8 +8,6 @@ const User = require('../models/user')
 
 const api = supertest(app)
 
-
-
 describe('blogs routes', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
@@ -97,13 +95,20 @@ describe('blogs routes', () => {
 })
 
 describe('users routes', () => {
-  describe('when there is one user in the db', () => {
+  describe('when there are users already in the db', () => {
     beforeEach(async () => {
       await User.deleteMany({})
-
       const passwordHash = await bcrypt.hash('secretpassword', 10)
-      const user = new User({ username: 'root', passwordHash })
-      await user.save()
+    
+      const user1 = helper.initialUsers[0]
+      const user2 = helper.initialUsers[1]
+      user1.passwordHash = passwordHash
+      user2.passwordHash = passwordHash
+
+      const userWithPassword1 = new User(user1)
+      await userWithPassword1.save()
+      const userWithPassword2 = new User(user2)
+      await userWithPassword2.save()
     })
 
     test('given a unique username, a new user is successfully created', async () => {
