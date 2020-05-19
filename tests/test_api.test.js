@@ -2,9 +2,33 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const bcrypt = require('bcrypt')
+const Blog = require('../models/blog')
 const User = require('../models/user')
 
 const api = supertest(app)
+
+const initialBlogs = [ 
+  { 
+    title: "React patterns", 
+    author: "Michael Chan", 
+    url: "https://reactpatterns.com/", 
+    likes: 7
+}, { 
+    title: "Go To Statement Considered Harmful",
+    author: "Edsger W. Dijkstra", 
+    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html", 
+    likes: 5
+}
+];
+
+beforeEach(async () => {
+  await Blog.deleteMany({})
+
+  let blog1 = new Blog(initialBlogs[0])
+  await blog1.save()
+  let blog2 = new Blog(initialBlogs[1])
+  await blog2.save()
+})
 
 test('blogs returned as json', async () => {
   await api 
@@ -13,16 +37,38 @@ test('blogs returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('there is one blog', async () => {
+test('all blogs returned', async () => {
   const response = await api.get('/api/blogs')
-  const body = JSON.parse(response.text)
-  expect(body).toHaveLength(1)
+  const body = response.body
+  console.log(body)
+  expect(body).toHaveLength(initialBlogs.length)
 })
 
-test('the blog has the title "myblog"', async () => {
+test('among returned blogs is a blog with a specific title', async () => {
   const response = await api.get('/api/blogs')
-  const body = JSON.parse(response.text)
-  expect(body[0].title).toBe('myblog')
+  const body = response.body
+  const titles = body.map(blog => blog.title)
+  expect(titles).toContain("React patterns")
+})
+
+test('a valid blog can be added', async () => {
+  const newBlog = { 
+    title: "Canonical string reduction", 
+    author: "Edsger W. Dijkstra", 
+    url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html", likes: 12
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    const body = response.body
+    const titles = body.map(blog => blog.title)
+
+    expect(body).toHaveLength(initialBlogs.length + 1)
+    expect(titles).toContain("Canonical string reduction")
 })
 
 afterAll(() => {
