@@ -40,7 +40,6 @@ test('blogs returned as json', async () => {
 test('all blogs returned', async () => {
   const response = await api.get('/api/blogs')
   const body = response.body
-  console.log(body)
   expect(body).toHaveLength(initialBlogs.length)
 })
 
