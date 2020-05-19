@@ -64,3 +64,16 @@ describe('favoriteBlog', () => {
     expect(listHelper.favoriteBlog(blogs3)).toEqual(blogs3[2]);
   });
 });
+
+// describe('most blogs', () => {
+//   test('given empty array, returns undefined', () => {
+//     expect(listHelper.mostBlogs(blogs1)).toBeUndefined()
+//   })
+//   test('given array with blogs with one blog, will return an object with expected author and blogs properties', () => {
+//     expect(listHelper.mostBlogs(blogs2)).toHaveProperty('author', 'Edsger W. Dijkstra')
+//   })
+//   test('given array containing multiple blogs and multiple authors, will returns an object containing expected author and blog values', () => {
+//     expect(listHelper.mostBlogs(blogs3)).toHaveProperty('author', "Robert C. Martin")
+//     expect(listHelper.mostBlogs(blogs3)).toHaveProperty('blogs', 3)
+//   })
+// })

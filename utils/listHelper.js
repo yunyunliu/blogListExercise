@@ -17,14 +17,9 @@ const favoriteBlog = blogs => {
   return mostLikes;
 }
 
-const mostBlogs = blogs => {
-  const ordered = _.orderBy(blogs, ['likes'], ['desc'])
-  const mostPopularAuthor = ordered[0].author;
-  const filtered = _.filter(blogs, ['author', mostPopularAuthor])
- return {
-  author: mostPopularAuthor,
-  blogs: filtered.length
- }
-}
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
+// const mostLikes = blogs => {
+
+// }
+
+module.exports = { dummy, totalLikes, favoriteBlog, motBlogs };
