@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const blogsRouter = require('./controllers/blogs');
 const usersRouter = require('./controllers/users')
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 .then(() => console.log('connected to mongodb'))
 .catch(() => console.log('there was a problem connection to mongodb'))
 
