@@ -1,6 +1,16 @@
 const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+
+const getToken = request => {
+  const authorization = request.get('authorization') // get contents of authorization header
+
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7) // this is the part of the header that contains the token
+  }
+  return null // if not authorization header provided, or doesn't use Bearer schema, return null
+}
 
 blogsRouter.get('/', async (request, response) => {
   const results = await Blog.find({}).populate('user', { username: 1, name: 1 })
@@ -10,7 +20,12 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const blogData = request.body
-  const user = await User.findById(blogData.userId) // use id provided in request to retrieve user info
+  const token = getToken(request)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!token || !decodedToken.id) { // if no token provided or wrong token
+    return response.status(401).json({ error: 'token missing or invalid '})
+  }
+  const user = await User.findById(decodedToken.id) // use id provided in token (this is the user that is logged in) to retrieve user info
 
     const blog = new Blog({ // create new blog document containing request body data
     title: blogData.title,
