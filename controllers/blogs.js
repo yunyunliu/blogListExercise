@@ -65,6 +65,18 @@ blogsRouter.put('/:id', async (request, response) => {
       console.log('error!', err.message)
     }
   })
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  try {
+    const blogComments = request.body.comments;
+    const blogId = request.params.id;
+    
+    const updatedBlog = await Blog.findByIdAndUpdate(blogId, { comments: blogComments }, { new: true });
+    response.json(updatedBlog.toJSON());
+  } catch (exception) {
+    console.log('comment could not be added - error', exception.message);
+  }
+})
   
 
 module.exports = blogsRouter;
