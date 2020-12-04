@@ -1,6 +1,7 @@
-requests
+/requests
+/node_modules
 .env
-node_modules
-node_modules
+npm-debug.log
+.DS_store
 .gitignore
 todo.txt
